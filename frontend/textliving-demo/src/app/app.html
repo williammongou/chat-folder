@@ -1,0 +1,128 @@
+<div class="container">
+  <header>
+    <h1>TextLiving AI Demo</h1>
+    <p class="subtitle">AI-Powered Apartment Leasing Conversation Analysis</p>
+  </header>
+
+  <div class="content">
+    <!-- Input Section -->
+    <div class="input-section">
+      <h2>Conversation Thread</h2>
+      <p class="instruction">
+        Paste a conversation between property manager and prospect below. Format: "Sender: Message text"
+      </p>
+
+      <!-- Sample Conversation Buttons -->
+      <div class="sample-buttons">
+        <button
+          *ngFor="let sample of sampleConversations; let i = index"
+          (click)="loadSample(i)"
+          class="btn-sample"
+          [disabled]="isLoading">
+          {{ sample.name }}
+        </button>
+      </div>
+
+      <textarea
+        [(ngModel)]="conversationText"
+        placeholder="Property Manager: Hi! Thanks for your interest in our apartments.&#10;Prospect: Hi, I'm looking for a 2-bedroom unit.&#10;Property Manager: Great! When are you looking to move in?&#10;..."
+        rows="12"
+        [disabled]="isLoading"
+        class="conversation-input">
+      </textarea>
+
+      <div class="button-group">
+        <button
+          (click)="analyzeConversation()"
+          [disabled]="isLoading || !conversationText.trim()"
+          class="btn-primary">
+          <span *ngIf="!isLoading">Analyze Conversation</span>
+          <span *ngIf="isLoading">Analyzing...</span>
+        </button>
+        <button
+          (click)="clearForm()"
+          [disabled]="isLoading"
+          class="btn-secondary">
+          Clear
+        </button>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section" *ngIf="analysisResult">
+      <h2>AI Analysis Results</h2>
+
+      <!-- Conversion Probability -->
+      <div class="result-card">
+        <h3>Conversion Probability</h3>
+        <div class="conversion-score">
+          <div class="score-number" [class]="getConversionClass(analysisResult.conversionProbability)">
+            {{ analysisResult.conversionProbability }}%
+          </div>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="analysisResult.conversionProbability"
+              [class]="getConversionClass(analysisResult.conversionProbability)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sentiment & Urgency -->
+      <div class="metrics-row">
+        <div class="metric-card">
+          <h3>Sentiment</h3>
+          <div class="metric-value" [class]="getSentimentClass(analysisResult.sentiment)">
+            {{ analysisResult.sentiment }}
+          </div>
+        </div>
+        <div class="metric-card">
+          <h3>Urgency Level</h3>
+          <div class="metric-value" [class]="getUrgencyClass(analysisResult.urgencyLevel)">
+            {{ analysisResult.urgencyLevel }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Next Best Messages -->
+      <div class="result-card">
+        <h3>Recommended Follow-up Messages</h3>
+        <div class="message-suggestions">
+          <div
+            *ngFor="let message of analysisResult.nextBestMessages; let i = index"
+            class="suggestion-card">
+            <div class="suggestion-number">{{ i + 1 }}</div>
+            <div class="suggestion-text">{{ message }}</div>
+            <button
+              (click)="copyToClipboard(message, i)"
+              class="btn-copy"
+              [class.copied]="copiedMessageIndex === i">
+              {{ copiedMessageIndex === i ? 'Copied!' : 'Copy' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insights -->
+      <div class="result-card">
+        <h3>Key Insights</h3>
+        <ul class="insights-list">
+          <li *ngFor="let insight of analysisResult.insights">{{ insight }}</li>
+        </ul>
+      </div>
+
+      <!-- Cost Info -->
+      <div class="cost-info">
+        <span>Tokens Used: {{ analysisResult.tokensUsed }}</span>
+        <span class="separator">|</span>
+        <span>Estimated Cost: ${{ analysisResult.estimatedCost.toFixed(4) }}</span>
+      </div>
+    </div>
+  </div>
+</div>
