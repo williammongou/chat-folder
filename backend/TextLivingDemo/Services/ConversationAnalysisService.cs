@@ -93,63 +93,82 @@ public class ConversationAnalysisService
     }
 
     /// <summary>
-    /// Creates the Claude prompt for conversation analysis
+    /// Creates the Claude prompt for SMS marketing campaign analysis
     /// This is optimized for structured JSON output
     /// </summary>
     private string BuildAnalysisPrompt(string conversationText)
     {
-        return $@"You are an expert apartment leasing consultant analyzing a conversation between a property manager and a prospective resident. Your goal is to help the property manager increase conversion rates.
+        return $@"You are an expert SMS marketing analyst for TextLiving, analyzing customer responses to promotional text campaigns. Your goal is to help businesses optimize their SMS marketing for maximum engagement, link clicks, purchases, and reviews.
 
-CONVERSATION THREAD:
+SMS CONVERSATION THREAD:
 {conversationText}
 
-Analyze this conversation and provide:
+Analyze this SMS conversation and provide:
 
-1. CONVERSION PROBABILITY (0-100): Based on engagement level, timeline urgency, objection handling, and buying signals
-   - Consider: response frequency, question depth, tour scheduling, budget discussions, move-in timeline
-   - High score (70-100): Strong interest, specific questions, tour scheduled, discussing move-in
-   - Medium score (40-69): General interest, asking questions, comparing options
-   - Low score (0-39): Browsing, vague responses, no timeline, price shopping only
+1. ENGAGEMENT SCORE (0-100): Overall likelihood customer will take desired action (click link, make purchase, leave review)
+   - Consider: response rate, message tone, question depth, expressed interest, buying signals
+   - High score (70-100): Enthusiastic, asking questions, clicked links, ready to purchase, agreed to leave review
+   - Medium score (40-69): Polite interest, some engagement, considering offer, might click link
+   - Low score (0-39): Minimal response, disinterest, opt-out requests, negative feedback
 
-2. SENTIMENT: Overall emotional tone of prospect's messages (Positive, Neutral, Negative)
-   - Positive: Enthusiastic, excited, expressing needs met
-   - Neutral: Professional, informational, matter-of-fact
-   - Negative: Frustrated, concerned, skeptical
+2. SENTIMENT: Overall emotional tone of customer's messages (Positive, Neutral, Negative)
+   - Positive: Enthusiastic, grateful, excited about offer
+   - Neutral: Polite, informational, transactional
+   - Negative: Frustrated, annoyed, requesting opt-out
 
-3. URGENCY LEVEL (Low, Medium, High): How quickly the prospect needs to move
-   - High: Immediate need, specific move-in date, time pressure
-   - Medium: Considering within 1-2 months, flexible timeline
-   - Low: Just browsing, no specific timeline, far future
+3. CUSTOMER INTENT: What the customer is trying to do (Interested, Browsing, Opted-Out, Needs-Support)
+   - Interested: Wants to learn more, clicked link, asking about products/services
+   - Browsing: Considering but not committed, might buy later
+   - Opted-Out: Wants to unsubscribe, getting too many messages
+   - Needs-Support: Has questions, issues, or needs help
 
-4. NEXT BEST MESSAGES: Generate exactly 3 contextually appropriate follow-up messages the property manager should send to increase conversion. These should:
-   - Address prospect's specific concerns or questions
-   - Move the conversation toward a tour/lease signing
-   - Be natural, friendly, and professional
-   - Include a clear call-to-action
-   - Each message should be 2-4 sentences
-   - Be personalized to this specific conversation context
+4. LINK CLICK LIKELIHOOD (High, Medium, Low): How likely customer will click promotional links
+   - High: Has clicked before, asking for links, expressing strong interest
+   - Medium: Showing some interest, might click with right offer
+   - Low: Not interested, has opted out, or ignores messages
 
-5. INSIGHTS: Provide 3-5 key observations about:
-   - Prospect's main pain points or objections
-   - What they're interested in (amenities, location, price, etc.)
-   - Opportunities to strengthen the pitch
-   - Red flags or risks to conversion
-   - Timeline and decision-making stage
+5. NEXT BEST MESSAGES: Generate exactly 3 optimized follow-up SMS messages to maximize engagement. These should:
+   - Be concise (SMS-appropriate, under 160 characters when possible)
+   - Include clear call-to-action with link or offer
+   - Be personalized to customer's interests and behavior
+   - Use proven SMS marketing tactics (urgency, exclusivity, value)
+   - For review requests: make it easy with direct link and incentive
+   - Each message should drive specific action (click, purchase, review)
+
+6. INSIGHTS: Provide 3-5 key observations about:
+   - Customer's buying intent and readiness to purchase
+   - What offers or products they're most interested in
+   - Optimal timing for follow-up messages
+   - Red flags (opt-out risk, fatigue, negative sentiment)
+   - Opportunities to increase engagement
+
+7. A/B TEST SUGGESTIONS: Provide 2-3 specific A/B testing ideas to improve campaign performance:
+   - Different message timing
+   - Offer variations (discount %, free shipping, BOGO, etc.)
+   - CTA variations (Shop Now, Learn More, Get Deal, etc.)
+   - Personalization approaches
+   - Link placement and formatting
 
 Return your analysis as valid JSON matching this exact structure:
 {{
-  ""conversionProbability"": <number 0-100>,
+  ""engagementScore"": <number 0-100>,
   ""sentiment"": ""<Positive|Neutral|Negative>"",
-  ""urgencyLevel"": ""<Low|Medium|High>"",
+  ""customerIntent"": ""<Interested|Browsing|Opted-Out|Needs-Support>"",
+  ""linkClickLikelihood"": ""<High|Medium|Low>"",
   ""nextBestMessages"": [
-    ""<message 1>"",
-    ""<message 2>"",
-    ""<message 3>""
+    ""<SMS message 1>"",
+    ""<SMS message 2>"",
+    ""<SMS message 3>""
   ],
   ""insights"": [
     ""<insight 1>"",
     ""<insight 2>"",
     ""<insight 3>""
+  ],
+  ""abTestSuggestions"": [
+    ""<test idea 1>"",
+    ""<test idea 2>"",
+    ""<test idea 3>""
   ]
 }}
 
@@ -192,18 +211,24 @@ IMPORTANT: Return ONLY the JSON object, no additional text or formatting.";
             // Return a fallback response if parsing fails
             return new AnalysisResponse
             {
-                ConversionProbability = 50,
+                EngagementScore = 50,
                 Sentiment = "Neutral",
-                UrgencyLevel = "Medium",
+                CustomerIntent = "Browsing",
+                LinkClickLikelihood = "Medium",
                 NextBestMessages = new List<string>
                 {
-                    "Thanks for your interest! When would be a good time for you to schedule a tour?",
-                    "I'd love to answer any questions you have about our community. What's most important to you?",
-                    "We have some great availability coming up. What's your ideal move-in timeline?"
+                    "Thanks for your interest! Click here to shop our latest deals: [link]",
+                    "We'd love your feedback! Leave a quick review and get 10% off: [link]",
+                    "Exclusive offer just for you - 20% off today only: [link]"
                 },
                 Insights = new List<string>
                 {
                     "Unable to fully analyze conversation - please review manually"
+                },
+                AbTestSuggestions = new List<string>
+                {
+                    "Test different discount percentages (15% vs 20% vs 25%)",
+                    "Test message timing (morning vs afternoon vs evening)"
                 }
             };
         }

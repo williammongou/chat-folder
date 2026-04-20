@@ -313,3 +313,8 @@ Typical bundle sizes:
 3. **Explain the value**: Point out how this saves property managers time
 4. **Show mobile**: Resize browser to show responsive design
 5. **Discuss scale**: Mention how this could integrate with TextLiving's existing platform
+
+
+
+# Kill already running process:
+### ** use this command: taskkill /F /IM TextLivingDemo.exe

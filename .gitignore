@@ -13,6 +13,8 @@ obj/
 publish/
 deploy.zip
 
+nul
+
 # API Keys and Secrets
 **/appsettings.Development.json
 **/appsettings.Local.json

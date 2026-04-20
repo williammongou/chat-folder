@@ -9,6 +9,7 @@ builder.Services.AddSwaggerGen();
 
 // Register our custom services
 builder.Services.AddSingleton<ConversationAnalysisService>();
+builder.Services.AddSingleton<CampaignGenerationService>();
 
 // Configure CORS for local development and Azure deployment
 builder.Services.AddCors(options =>
@@ -45,7 +46,8 @@ if (app.Environment.IsDevelopment())
 // Use CORS before other middleware
 app.UseCors("AllowFrontend");
 
-app.UseHttpsRedirection();
+// Comment out HTTPS redirection for local development
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

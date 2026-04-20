@@ -1,0 +1,128 @@
+{
+  "businessName": "Tony's Pizza & Pasta",
+  "businessType": "Restaurant",
+  "campaigns": [
+    {
+      "id": "camp_001",
+      "outgoingText": "🍕 HUGE SALE!!! COME IN TODAY. Or lose this sale!! Don't waste it",
+      "sentAt": "2024-01-15T10:00:00Z",
+      "recipientCount": 2500,
+      "incomingReplies": [
+        { "text": "STOP", "count": 87 },
+        { "text": "QUIT", "count": 23 },
+        { "text": "Unsubscribe", "count": 15 },
+        { "text": "Too many texts", "count": 8 }
+      ],
+      "footTraffic": 45,
+      "conversions": 28,
+      "conversionRate": 1.12,
+      "unsubscribeRate": 5.32,
+      "notes": "Very high unsubscribe rate - aggressive tone backfired"
+    },
+    {
+      "id": "camp_002",
+      "outgoingText": "Hey! Free garlic bread with any large pizza today. Show this text at Tony's Pizza. Valid until 9 PM",
+      "sentAt": "2024-01-22T11:30:00Z",
+      "recipientCount": 2500,
+      "incomingReplies": [
+        { "text": "Thanks!", "count": 34 },
+        { "text": "Be there soon", "count": 18 },
+        { "text": "What time you close?", "count": 12 },
+        { "text": "Can I use tomorrow?", "count": 9 },
+        { "text": "STOP", "count": 3 }
+      ],
+      "footTraffic": 156,
+      "conversions": 142,
+      "conversionRate": 5.68,
+      "unsubscribeRate": 0.12,
+      "notes": "Best performing campaign - specific offer, clear deadline, personalized greeting"
+    },
+    {
+      "id": "camp_003",
+      "outgoingText": "Limited time offer at Tony's Pizza",
+      "sentAt": "2024-01-29T14:00:00Z",
+      "recipientCount": 2500,
+      "incomingReplies": [
+        { "text": "What's the offer?", "count": 47 },
+        { "text": "More info?", "count": 21 },
+        { "text": "STOP", "count": 5 }
+      ],
+      "footTraffic": 23,
+      "conversions": 18,
+      "conversionRate": 0.72,
+      "unsubscribeRate": 0.20,
+      "notes": "Too vague - no clear call to action or benefit stated"
+    },
+    {
+      "id": "camp_004",
+      "outgoingText": "It's Tuesday! 🍕 2-for-1 pizza special at Tony's today only. Dine-in or takeout. See you soon!",
+      "sentAt": "2024-02-05T16:00:00Z",
+      "recipientCount": 2500,
+      "incomingReplies": [
+        { "text": "On my way!", "count": 42 },
+        { "text": "Awesome", "count": 28 },
+        { "text": "Save me a table for 4", "count": 7 },
+        { "text": "STOP", "count": 2 }
+      ],
+      "footTraffic": 187,
+      "conversions": 168,
+      "conversionRate": 6.72,
+      "unsubscribeRate": 0.08,
+      "notes": "Excellent performance - day-specific promo, emoji, friendly tone, clear offer"
+    },
+    {
+      "id": "camp_005",
+      "outgoingText": "LAST CHANCE!! FINAL HOURS!! BUY NOW OR REGRET IT FOREVER!!!",
+      "sentAt": "2024-02-10T19:00:00Z",
+      "recipientCount": 2500,
+      "incomingReplies": [
+        { "text": "STOP", "count": 156 },
+        { "text": "Stop spamming me", "count": 34 },
+        { "text": "Unsubscribe", "count": 28 },
+        { "text": "This is annoying", "count": 19 }
+      ],
+      "footTraffic": 12,
+      "conversions": 8,
+      "conversionRate": 0.32,
+      "unsubscribeRate": 9.48,
+      "notes": "WORST campaign - too aggressive, all caps, no specific offer mentioned"
+    },
+    {
+      "id": "camp_006",
+      "outgoingText": "Maria, thanks for being a loyal customer! Here's 20% off your next visit to Tony's. Use code LOYAL20. Valid for 7 days.",
+      "sentAt": "2024-02-14T10:00:00Z",
+      "recipientCount": 500,
+      "incomingReplies": [
+        { "text": "Thank you!", "count": 87 },
+        { "text": "Love your pizza", "count": 23 },
+        { "text": "Will be there this weekend", "count": 15 },
+        { "text": "STOP", "count": 1 }
+      ],
+      "footTraffic": 94,
+      "conversions": 89,
+      "conversionRate": 17.8,
+      "unsubscribeRate": 0.20,
+      "notes": "Personalized loyalty campaign - very high conversion, targeted smaller list"
+    }
+  ],
+  "insights": {
+    "bestPerformingCampaign": "camp_004",
+    "worstPerformingCampaign": "camp_005",
+    "averageConversionRate": 5.42,
+    "averageUnsubscribeRate": 2.57,
+    "bestSendTime": "11:30 AM - 12:00 PM (lunch) and 4:00 PM - 5:30 PM (dinner)",
+    "redFlags": [
+      "All caps messages",
+      "Aggressive language (HUGE, LAST CHANCE, REGRET)",
+      "Vague offers without specifics",
+      "Too many exclamation marks"
+    ],
+    "successPatterns": [
+      "Personalized greetings",
+      "Specific offers (free item, percentage off, 2-for-1)",
+      "Clear deadlines (today, until 9PM, 7 days)",
+      "Friendly emoji use (1-2 per message)",
+      "Day-specific promotions (Tuesday special)"
+    ]
+  }
+}

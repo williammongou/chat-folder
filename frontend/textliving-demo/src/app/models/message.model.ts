@@ -9,11 +9,13 @@ export interface ConversationRequest {
 }
 
 export interface AnalysisResponse {
-  conversionProbability: number;
+  engagementScore: number;
   sentiment: string;
-  urgencyLevel: string;
+  customerIntent: string;
+  linkClickLikelihood: string;
   nextBestMessages: string[];
   insights: string[];
+  abTestSuggestions: string[];
   tokensUsed: number;
   estimatedCost: number;
 }
