@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +10,7 @@ import {
   TokenUsageResponse,
   HistoricalCampaignData
 } from './models/campaign.model';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,7 @@ import {
   styleUrls: ['./app.css']
 })
 export class AppComponent {
-  private apiUrl = 'http://localhost:5000/api/campaign';
+  private apiUrl = environment.apiUrl + '/api/campaign';
 
   // Chat state
   messages: ChatMessage[] = [];
@@ -42,7 +43,7 @@ export class AppComponent {
   // File upload
   fileInputElement: HTMLInputElement | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {
     this.addWelcomeMessage();
     this.loadTokenUsage();
   }
@@ -70,7 +71,8 @@ export class AppComponent {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Scroll to bottom after adding user message
+    // Force UI update and scroll
+    this.cdr.detectChanges();
     setTimeout(() => this.scrollToBottom(), 100);
 
     try {
@@ -98,7 +100,8 @@ export class AppComponent {
         this.tokenUsage.percentageUsed = (response.totalTokensToday / 10000) * 100;
         this.tokenUsage.status = this.getTokenStatus(this.tokenUsage.percentageUsed);
 
-        // Scroll to bottom after adding assistant message
+        // Force UI update and scroll
+        this.cdr.detectChanges();
         setTimeout(() => this.scrollToBottom(), 100);
       }
     } catch (error: any) {
@@ -164,7 +167,8 @@ export class AppComponent {
           timestamp: new Date()
         });
 
-        // Scroll to show the new message
+        // Force UI update and scroll
+        this.cdr.detectChanges();
         setTimeout(() => this.scrollToBottom(), 100);
       } catch (error) {
         this.errorMessage = 'Failed to parse JSON file. Please check the format.';

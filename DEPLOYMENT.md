@@ -1,17 +1,24 @@
 # Azure Deployment Guide - TextLiving AI Demo
 
-Complete step-by-step guide for deploying the TextLiving AI Demo to Azure for **under $5/month**.
+Complete step-by-step guide for deploying the TextLiving AI Demo to Azure with **B1 Basic tier** for reliable 24/7 operation.
 
 ## Cost Breakdown (Estimated Monthly)
 
 | Service | Tier | Cost |
 |---------|------|------|
 | Azure Static Web Apps (Frontend) | Free | $0.00 |
-| Azure App Service (Backend) | F1 Free | $0.00 |
+| Azure App Service (Backend) | **B1 Basic** | **$13.14/month** |
 | Claude API Usage | Pay-as-you-go | ~$2-5 |
-| **Total** | | **~$2-5/month** |
+| **Total** | | **~$15-18/month** |
 
-**Note**: The Free tier has limitations (60 min/day compute for App Service). For production, consider Basic tier ($13/month).
+**For 3-Day Presentation:** ~$1.30 total (B1 tier for 3 days)
+
+**Why B1 instead of F1 Free?**
+- ✅ **Unlimited compute time** (F1 has only 60 min/day)
+- ✅ **Runs 24/7 non-stop** (F1 becomes slow after 60 mins)
+- ✅ **Better performance** for demos
+- ✅ **Can start/stop to save money** (no charges when stopped)
+- ✅ **Production-ready** for presentations
 
 ## Prerequisites
 
@@ -38,25 +45,27 @@ az group create \
   --location eastus
 ```
 
-#### Step 3: Create App Service Plan (Free Tier)
+#### Step 3: Create App Service Plan (B1 Basic Tier)
 
 ```bash
 az appservice plan create \
   --name textliving-demo-plan \
   --resource-group textliving-demo-rg \
-  --sku F1 \
+  --sku B1 \
   --is-linux
 ```
 
-**Note**: F1 (Free) tier limitations:
-- 60 minutes/day compute time
-- 1 GB disk space
-- No custom domains
-- Perfect for demos and interviews
+**B1 (Basic) tier benefits:**
+- ✅ **Unlimited compute time** (no daily limits)
+- ✅ **Always-on** - runs 24/7 without interruption
+- ✅ **Better performance** than Free tier
+- ✅ **Custom domains** and SSL support
+- ✅ **Can start/stop** to control costs
+- 💰 **Cost**: $13.14/month (~$0.44/day, ~$1.30 for 3 days)
 
-For production, upgrade to B1 (Basic):
+**Alternative - F1 Free Tier (NOT RECOMMENDED for presentations):**
 ```bash
---sku B1  # $13/month, always-on, better performance
+--sku F1  # FREE but only 60 min/day compute - will slow down during demos!
 ```
 
 #### Step 4: Create Web App
@@ -551,9 +560,27 @@ Monitor usage at [Anthropic Console](https://console.anthropic.com/):
 - Review token consumption per request
 - Consider caching frequent queries
 
-## Cleanup (Delete Everything)
+## Managing Your Deployment
 
-To remove all Azure resources and stop charges:
+### Stop App Service (Between Presentations)
+
+**Save money by stopping when not in use** (no charges while stopped):
+
+```bash
+az webapp stop --name textliving-api-demo --resource-group textliving-demo-rg
+```
+
+### Start App Service (Before Presentation)
+
+```bash
+az webapp start --name textliving-api-demo --resource-group textliving-demo-rg
+```
+
+**Note**: Takes ~30 seconds to start up. Start it 5 minutes before your demo!
+
+### Cleanup (Delete Everything After 3 Days)
+
+To remove all Azure resources and stop ALL charges:
 
 ```bash
 az group delete \
@@ -563,18 +590,24 @@ az group delete \
 ```
 
 This deletes:
-- App Service
-- Storage Account
-- Static Web App
+- App Service ($13/month stops)
+- Static Web App (free anyway)
 - All associated resources
+
+**IMPORTANT**: Run this command after your presentation ends to avoid ongoing charges!
 
 ## Cost Optimization Tips
 
-1. **Free Tier is Sufficient for Demos**: F1 App Service + Free Static Web Apps = $0
-2. **Monitor Claude API Usage**: Set alerts at $5, $10, $20
-3. **Use Basic (B1) for Real Traffic**: Only $13/month, much better performance
-4. **Storage is Cheaper**: Static website hosting costs ~$0.02/GB/month
-5. **Turn Off When Not in Use**: Stop the App Service between demos
+1. **B1 Basic is Recommended**: $13/month for reliable 24/7 operation (worth it for presentations!)
+2. **Stop Between Presentations**: Save money by stopping the App Service when not demoing
+   ```bash
+   az webapp stop --name textliving-api-demo --resource-group textliving-demo-rg
+   az webapp start --name textliving-api-demo --resource-group textliving-demo-rg
+   ```
+3. **Delete After Presentation**: Remove all resources after your 3-day presentation to stop charges
+4. **Monitor Claude API Usage**: Set alerts at $5, $10, $20
+5. **Storage is Free**: Static Web Apps free tier is unlimited for demos
+6. **3-Day Cost Estimate**: ~$1.30 (B1) + ~$0.50 (Claude API) = **~$2 total**
 
 ## Next Steps for Production
 
@@ -608,3 +641,44 @@ When moving beyond the demo:
 - [ ] Documentation reviewed and understood
 
 **Your demo is ready!** 🎉
+
+
+
+Step 6: Get Your Deployment Credentials
+Back in your Web App overview page:
+In left sidebar, find "Deployment Center" under Deployment
+Click "FTPS credentials" or "Local Git/FTPS credentials" tab
+You'll see a username and password - save these (optional, for FTP)
+For deployment, you'll use the Azure CLI ZIP deploy method from the DEPLOYMENT.md.
+Step 7: Continue with DEPLOYMENT.md
+Now jump to Step 6 in your DEPLOYMENT.md (line 107):
+cd backend/TextLivingDemo
+
+# Build release version
+dotnet publish -c Release -o ./publish
+
+# Create deployment ZIP (Windows PowerShell)
+Compress-Archive -Path .\publish\* -DestinationPath deploy.zip -Force
+
+# Deploy to Azure
+az webapp deployment source config-zip `
+  --resource-group textliving-demo-rg `
+  --name textliving-api-demo `
+  --src deploy.zip
+Troubleshooting
+If you still get quota error in the portal:
+Try different regions - use the Region dropdown to try:
+West US
+West US 2
+Central US
+South Central US
+Use F1 Free Tier temporarily (just to test):
+During "Pricing Plan" step, select "F1" instead of "B1"
+This will work for initial testing
+You can scale up to B1 later once quota is approved
+To scale F1 → B1 later:
+Go to your Web App in portal
+Left sidebar → "Scale up (App Service plan)"
+Select "B1" tier
+Click "Apply"
+Would you like me to update the DEPLOYMENT.md to include these portal-based instructions as an alternative to the CLI-only approach?

@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000'
+  apiUrl: 'https://textliving-api-demo-a4bqdtbheggkhub9.canadacentral-01.azurewebsites.net'
 };

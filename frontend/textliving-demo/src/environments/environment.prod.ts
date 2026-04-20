@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://YOUR_AZURE_API_URL.azurewebsites.net'
+  apiUrl: 'https://textliving-api-demo-a4bqdtbheggkhub9.canadacentral-01.azurewebsites.net'
 };
